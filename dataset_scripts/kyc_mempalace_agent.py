@@ -11,8 +11,14 @@ config = {
         "provider": "openai",
         "config": {
             "model": "qwen-abliterated",
-            "openai_api_key": "local_spark_key",
+            "api_key": "local_spark_key",
             "openai_base_url": "http://127.0.0.1:8000/v1"
+        }
+    },
+    "embedder": {
+        "provider": "huggingface",
+        "config": {
+            "model": "BAAI/bge-small-en-v1.5"
         }
     },
     "vector_store": {
@@ -37,8 +43,8 @@ def run_agent(prompt: str):
         
     print("Recalling relevant rules from Memory Palace...")
     try:
-        memories = m.search(prompt, user_id="agent_kyc_expert")
-        memory_context = "\n".join([mem["text"] for mem in memories]) if memories else "No specific structural rules recalled."
+        results = m.search(prompt, filters={"user_id": "agent_kyc_expert"})
+        memory_context = "\n".join([r.get("memory", r.get("text", "")) for r in results]) if results else "No specific structural rules recalled."
     except Exception as e:
         print(f"Memory retrieval failed: {e}")
         memory_context = "No specific structural rules recalled."

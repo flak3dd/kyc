@@ -9,8 +9,14 @@ config = {
         "provider": "openai",
         "config": {
             "model": "qwen-abliterated",
-            "openai_api_key": "local_spark_key",
+            "api_key": "local_spark_key",
             "openai_base_url": "http://127.0.0.1:8000/v1"
+        }
+    },
+    "embedder": {
+        "provider": "huggingface",
+        "config": {
+            "model": "BAAI/bge-small-en-v1.5"
         }
     },
     "vector_store": {
