@@ -1,0 +1,12 @@
+requests
+huggingface_hub
+mlcroissant
+pyspark
+vllm
+ray
+mem0ai
+chromadb
+openai
+pydantic
+fastapi
+uvicorn

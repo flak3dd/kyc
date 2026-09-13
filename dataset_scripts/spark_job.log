@@ -1,0 +1,26 @@
+[2mConnecting to DGX Spark...[0m
+[92m[1m
+  ███████╗██████╗  █████╗ ██████╗ ██╗  ██╗    ████████╗███████╗██████╗ ███╗   ███╗
+  ██╔════╝██╔══██╗██╔══██╗██╔══██╗██║ ██╔╝    ╚══██╔══╝██╔════╝██╔══██╗████╗ ████║
+  ███████╗██████╔╝███████║██████╔╝█████╔╝        ██║   █████╗  ██████╔╝██╔████╔██║
+  ╚════██║██╔═══╝ ██╔══██║██╔══██╗██╔═██╗        ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║
+  ███████║██║     ██║  ██║██║  ██║██║  ██╗       ██║   ███████╗██║  ██║██║ ╚═╝ ██║
+  ╚══════╝╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝       ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝
+[0m
+[2m  ───────────────────────────────────────────────────────────────────────────────[0m
+  [1mDGX Spark Host:[0m  [36mflak3dd[0m (Direct LAN: [92m192.168.4.103:8000[0m)
+  [1mActive Model:[0m    [92m[1mQwen 3.6 35B-A3B[0m [[33mqwen-abliterated[0m] (NVFP4 + MTP · 65k) [92m● LIVE[0m
+  [1mGPU Status:[0m      [97mNVIDIA GB10[0m · [36mNaN/NaN GB VRAM[0m (0% load · 41°C)
+  [1mGPU Container:[0m   [95m● qwen-abliterated[0m (Up 5 hours)
+[2m  ───────────────────────────────────────────────────────────────────────────────[0m
+  [2mCommands: [36m/m[2m (switch model) · [36m/deploy <recipe>[2m · [36m/gpu[2m · [36m/status[2m · [36m/sys[2m · [36m/c[2m · [36m/image[2m · [36m/exit[0m
+
+Terminal error: Error [ERR_USE_AFTER_CLOSE]: readline was closed
+    at [kQuestion] (node:internal/readline/interface:400:13)
+    at node:readline/promises:56:22
+    at new Promise (<anonymous>)
+    at Interface.question (node:readline/promises:31:12)
+    at SparkTerminal.run (file:///Users/adminuser/.spark-client/spark-terminal.mjs:695:34)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {
+  code: 'ERR_USE_AFTER_CLOSE'
+}

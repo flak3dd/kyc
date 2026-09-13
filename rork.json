@@ -1,0 +1,25 @@
+{
+  "$schema": "https://rork.com/schema/rork.json",
+  "apps": [
+    {
+      "name": "BoundaryLab",
+      "path": "ios-boundarylab",
+      "framework": "swift"
+    },
+    {
+      "name": "BoundaryLab",
+      "path": "android-boundarylab",
+      "framework": "kotlin"
+    },
+    {
+      "name": "BoundaryLab Range",
+      "path": "web-boundarylab-range",
+      "framework": "web"
+    },
+    {
+      "name": "Functions",
+      "path": "functions",
+      "framework": "cloudflare"
+    }
+  ]
+}

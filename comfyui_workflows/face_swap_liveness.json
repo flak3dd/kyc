@@ -1,0 +1,57 @@
+{
+  "1": {
+    "inputs": {
+      "image": "selfies/sample_0.jpg",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Source Selfie"
+    }
+  },
+  "2": {
+    "inputs": {
+      "image": "spoofing/sample_0.jpg",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Target Liveness Frame"
+    }
+  },
+  "3": {
+    "inputs": {
+      "enabled": true,
+      "swap_model": "inswapper_128.onnx",
+      "facedetection": "retinaface_resnet50",
+      "face_restore_model": "codeformer.pth",
+      "face_restore_visibility": 1,
+      "codeformer_weight": 0.5,
+      "source_image": [
+        "1",
+        0
+      ],
+      "target_image": [
+        "2",
+        0
+      ]
+    },
+    "class_type": "ReActorFaceSwap",
+    "_meta": {
+      "title": "ReActor Face Swap"
+    }
+  },
+  "4": {
+    "inputs": {
+      "filename_prefix": "face_still",
+      "images": [
+        "3",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save Face Swap"
+    }
+  }
+}
