@@ -11,8 +11,8 @@ config = {
         "provider": "openai",
         "config": {
             "model": "qwen-abliterated",
-            "api_key": os.getenv("SPARK_API_KEY", "local_spark_key"),
-            "openai_api_base": "http://127.0.0.1:8080/v1"
+            "openai_api_key": "local_spark_key",
+            "openai_base_url": "http://127.0.0.1:8000/v1"
         }
     },
     "vector_store": {
@@ -24,7 +24,7 @@ config = {
     }
 }
 
-SPARK_CHAT_URL = "http://127.0.0.1:8080/v1/chat/completions"
+SPARK_CHAT_URL = "http://127.0.0.1:8000/v1/chat/completions"
 
 def run_agent(prompt: str):
     print(f"Agent received prompt: {prompt}")

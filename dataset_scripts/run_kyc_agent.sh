@@ -8,10 +8,10 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-export SPARK_LOCAL_PORT="8080"
+export SPARK_LOCAL_PORT="8000"
 export SPARK_API_KEY="local_spark_key"
-# Tell OpenAI SDK (used by mem0ai) where to find our local Spark Agent
-export OPENAI_API_BASE="http://127.0.0.1:8080/v1"
+export OPENAI_API_KEY="local_spark_key"
+export OPENAI_BASE_URL="http://127.0.0.1:8000/v1"
 
 echo "Running Stateful KYC Agent..."
-python3.11 kyc_mempalace_agent.py "$1"
+python3 kyc_mempalace_agent.py "$1"
