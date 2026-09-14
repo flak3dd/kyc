@@ -31,6 +31,32 @@ class ComfyUIClient:
         print(f"Result: {result}")
         return result
 
+    def submit_krea2_identity_edit(self, image_path: str, prompt: str, ref_boost: float = 4.0, grounding_px: int = 768, workflow_path: str = "../comfyui_workflows/krea2_identity_edit.json"):
+        """
+        Loads the Krea-2 Identity Edit workflow template, injects custom source image,
+        instruction prompt, and conditioning parameters, and queues it to ComfyUI.
+        """
+        try:
+            with open(workflow_path, "r", encoding="utf-8") as f:
+                workflow = json.load(f)
+            
+            # Inject inputs
+            if "1" in workflow and "inputs" in workflow["1"]:
+                workflow["1"]["inputs"]["image"] = image_path
+            if "8" in workflow and "inputs" in workflow["8"]:
+                workflow["8"]["inputs"]["ref_boost"] = float(ref_boost)
+            if "9" in workflow and "inputs" in workflow["9"]:
+                workflow["9"]["inputs"]["prompt"] = prompt
+                workflow["9"]["inputs"]["grounding_px"] = int(grounding_px)
+            if "10" in workflow and "inputs" in workflow["10"]:
+                workflow["10"]["inputs"]["grounding_px"] = int(grounding_px)
+                
+            print(f"Queueing Krea-2 Identity Edit for image='{image_path}' prompt='{prompt}'...")
+            return self.queue_prompt(workflow)
+        except Exception as e:
+            print(f"Failed to submit Krea-2 Identity Edit: {e}")
+            return {}
+
     def run_workflow(self, workflow_path: str):
         """
         Loads a JSON workflow and queues it.
@@ -53,3 +79,5 @@ if __name__ == "__main__":
     client.run_workflow("../comfyui_workflows/id_document_editor.json")
     client.run_workflow("../comfyui_workflows/face_swap_liveness.json")
     client.run_workflow("../comfyui_workflows/spoof_artifact_injector.json")
+    client.run_workflow("../comfyui_workflows/krea2_identity_edit.json")
+

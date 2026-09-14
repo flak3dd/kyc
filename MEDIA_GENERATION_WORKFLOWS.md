@@ -982,9 +982,38 @@ AND (silentFrontPassiveUrl != null OR silentFrontLivenessUrl != null)
 3. Quality-gate stills and video
 4. Push package / Arm Lab Host (SUBSTITUTE baseline)
 5. Reload target page
-6. Drive docs → liveness → widget on Range or authorized URL
-```
+---
+
+## 21. Sovereign Cluster ComfyUI Workflows
+
+For local on-premise execution on Sovereign Spark / DGX cluster, ComfyUI workflows are maintained in `comfyui_workflows/`:
+
+| Workflow File | Core Technology | Primary Role in IDV/KYC Boundary Testing |
+|---|---|---|
+| `id_document_editor.json` | SDXL + ControlNet | High-fidelity synthetic ID front/back generation & text layout verification |
+| `face_swap_liveness.json` | ReActor + CodeFormer | Identity transfer onto target challenge frames |
+| `spoof_artifact_injector.json` | SDXL img2img | Injection of presentation attack artifacts (screen moire, reflections, paper grain) |
+| `krea2_identity_edit.json` | Krea 2 + `conradlocke/krea2-identity-edit` | **Instruction-based identity-preserving portrait edit & restaging** |
+
+### Krea 2 Identity Edit Specification
+- **Model Card:** [`conradlocke/krea2-identity-edit`](https://huggingface.co/conradlocke/krea2-identity-edit)
+- **Node Extension:** [`comfyui-krea2edit`](https://github.com/lbouaraba/comfyui-krea2edit) (`custom_nodes/comfyui-krea2edit`)
+- **Dual Conditioning Architecture:**
+  - `Krea2EditModelPatch`: Prepends clean VAE-encoded source latent tokens (`source_latent` frame 1) to the MMDiT sequence. Recommended `ref_boost: 4.0`, `fit_mode: "fit"`.
+  - `Krea2EditGroundedEncode`: Text encoder sees the source portrait image during instruction reading via Qwen3-VL (`qwen3vl_4b_fp8_scaled.safetensors`). Recommended `grounding_px: 768`.
+- **Base Models:**
+  - UNet: `krea2_turbo_fp8_scaled.safetensors` (10 steps, Euler, simple scheduler, CFG 1.0)
+  - Text Encoder: `qwen3vl_4b_fp8_scaled.safetensors` (CLIP type `krea2`)
+  - VAE: `ae.safetensors`
+- **LoRA Variants:**
+  - Recommended: `krea2_identity_edit_v1_2.safetensors`
+  - Low-VRAM: `krea2_identity_edit_v1_2_r128.safetensors` (0.91 GB), `krea2_identity_edit_v1_2_r64.safetensors` (0.46 GB)
+- **Download Utility:**
+  ```bash
+  python3 dataset_scripts/download_krea2_identity_edit.py --variant v1_2
+  ```
 
 ---
 
-*Document version: 2026-08-11 · Aligned with `PipelineOrchestrator`, `XaiMediaClient` model IDs (Kling turbo/v3 + Wan i2v), Rork Toolkit credential resolution, and two-stage wall → face composite.*
+*Document version: 2026-09-14 · Aligned with `PipelineOrchestrator`, `XaiMediaClient`, ComfyUI local cluster workflows, and `conradlocke/krea2-identity-edit` identity restaging.*
+

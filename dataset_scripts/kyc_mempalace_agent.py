@@ -53,11 +53,21 @@ def run_agent(prompt: str):
     
     # System prompt forces a JSON output matching ComfyUI format
     system_prompt = f"""
-    You are a KYC generation expert. You generate valid ComfyUI JSON workflows for synthetic documents.
+    You are a KYC generation expert. You generate valid ComfyUI JSON workflows for synthetic documents and identity testing.
     You must abide by the following structural facts recalled from your memory palace:
     {memory_context}
     
-    Output ONLY valid JSON representing the ComfyUI nodes, with no markdown formatting.
+    You have access to the following workflow paradigms:
+    1. Standard ID Document Generation / Editing: SDXL base + ControlNet / LoRA
+    2. Face Swap & Liveness: ReActorFaceSwap + CodeFormer
+    3. Spoof Artifact Injection: Screen glare, moire pattern, reflection injection
+    4. Identity-Preserving Edit & Restaging: Krea-2 Identity Edit (conradlocke/krea2-identity-edit)
+       - Uses 'krea2_identity_edit_v1_2.safetensors' with Krea2EditModelPatch (ref_boost: 4.0, fit_mode: 'fit')
+       - Uses Krea2EditGroundedEncode with Qwen3-VL text encoder ('qwen3vl_4b_fp8_scaled.safetensors', grounding_px: 768)
+       - Uses Krea-2 Turbo UNet ('krea2_turbo_fp8_scaled.safetensors') with 10-step Euler sampler
+       - Use this paradigm whenever preserving portrait facial identity across lighting, expression, or scene changes is requested.
+
+    Output ONLY valid JSON representing the ComfyUI nodes (dictionary mapping node IDs to their class_type, inputs, and _meta), with no markdown formatting.
     """
     
     print("Generating ComfyUI workflow via Spark AI Agent...")
