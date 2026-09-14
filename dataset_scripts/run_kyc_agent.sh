@@ -13,5 +13,16 @@ export SPARK_API_KEY="local_spark_key"
 export OPENAI_API_KEY="local_spark_key"
 export OPENAI_BASE_URL="http://127.0.0.1:8000/v1"
 
-echo "Running Stateful KYC Agent..."
-python3 kyc_mempalace_agent.py "$1"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+
+if [ -f "venv/bin/python3" ]; then
+    PYTHON_BIN="venv/bin/python3"
+elif [ -f "../venv/bin/python3" ]; then
+    PYTHON_BIN="../venv/bin/python3"
+else
+    PYTHON_BIN="python3"
+fi
+
+echo "Running Stateful KYC Agent using $PYTHON_BIN..."
+$PYTHON_BIN kyc_mempalace_agent.py "$1"
