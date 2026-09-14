@@ -61,12 +61,26 @@ def run_agent(prompt: str):
     You have access to the following workflow paradigms:
     1. Standard ID Document Generation / Editing: SDXL base + ControlNet / LoRA
     2. Face Swap & Liveness: ReActorFaceSwap + CodeFormer
-    3. Spoof Artifact Injection: Screen glare, moire pattern, reflection injection
+    3. Spoof Artifact Injection: Screen glare, moire pattern, reflection, cracked screen injection
     4. Identity-Preserving Edit & Restaging: Krea-2 Identity Edit (conradlocke/krea2-identity-edit)
        - Uses 'krea2_identity_edit_v1_2.safetensors' with Krea2EditModelPatch (ref_boost: 4.0, fit_mode: 'fit')
        - Uses Krea2EditGroundedEncode with Qwen3-VL text encoder ('qwen3vl_4b_fp8_scaled.safetensors', grounding_px: 768)
        - Uses Krea-2 Turbo UNet ('krea2_turbo_fp8_scaled.safetensors') with 10-step Euler sampler
-       - Use this paradigm whenever preserving portrait facial identity across lighting, expression, or scene changes is requested.
+
+    STRICT COMFYUI NODE CLASS_TYPE SPECIFICATIONS:
+    You must ONLY use official ComfyUI node class_type names. NEVER invent or hallucinate node names:
+    - Loading checkpoints: "CheckpointLoaderSimple" (inputs: {{"ckpt_name": "sd_xl_base_1.0.safetensors"}})
+    - Loading ControlNet: "ControlNetLoader" (inputs: {{"control_net_name": "controlnet-canny-sdxl-1.0.safetensors"}}). NEVER use "LoadControlNet".
+    - Applying ControlNet: "ControlNetApplyAdvanced" (inputs: {{"positive": [...], "negative": [...], "control_net": [...], "image": [...], "strength": 0.8}})
+    - Text Prompts: "CLIPTextEncode" (inputs: {{"text": "...", "clip": [...]}})
+    - Sampling: "KSampler" (inputs: {{"model": [...], "positive": [...], "negative": [...], "latent_image": [...], "seed": 12345, "steps": 20, "cfg": 7.0, "sampler_name": "euler", "scheduler": "normal", "denoise": 0.6}})
+    - Loading images: "LoadImage" (inputs: {{"image": "id_cards/sample_0.jpg", "upload": "image"}})
+    - VAE encode: "VAEEncode" (inputs: {{"pixels": [...], "vae": [...]}})
+    - VAE decode: "VAEDecode" (inputs: {{"samples": [...], "vae": [...]}})
+    - Saving images: "SaveImage" (inputs: {{"filename_prefix": "kyc_output", "images": [...]}})
+    - Empty Latents: "EmptyLatentImage" (inputs: {{"width": 1024, "height": 1024, "batch_size": 1}})
+
+    For spoofing tasks (e.g. cracked screen, moire pattern, reflections), use img2img or text-to-image with CheckpointLoaderSimple, CLIPTextEncode (describing the passport document, cracked glass texture, reflections), KSampler, and SaveImage.
 
     Output ONLY valid JSON representing the ComfyUI nodes (dictionary mapping node IDs to their class_type, inputs, and _meta), with no markdown formatting.
     """
