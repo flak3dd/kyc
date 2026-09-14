@@ -98,17 +98,28 @@ def run_agent(prompt: str):
         workflow_dict = json.loads(reply)
         print("Successfully generated valid ComfyUI workflow.")
         
+        # Save copy for inspection and debugging
+        try:
+            debug_path = Path("../datasets/processed/last_generated_workflow.json")
+            debug_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(debug_path, "w", encoding="utf-8") as f:
+                json.dump(workflow_dict, f, indent=2)
+            print(f"Saved workflow to {debug_path}")
+        except Exception as e:
+            print(f"Could not save debug workflow: {e}")
+        
         # Dispatch to ComfyUI
         print("Submitting to ComfyUI...")
         comfy = ComfyUIClient()
         result = comfy.submit_dynamic_workflow(workflow_dict)
         
-        # Optional: Save success back to memory
-        if "prompt_id" in result or "error" not in result:
-            print("Successfully submitted! Storing success memory...")
+        # Check result from ComfyUI
+        if result and "prompt_id" in result:
+            print(f"Successfully queued in ComfyUI! Prompt ID: {result['prompt_id']}")
+            print("Storing success memory...")
             m.add(f"Successfully generated workflow for prompt: '{prompt}'", user_id="agent_kyc_expert")
         else:
-            print(f"Submission returned: {result}")
+            print(f"Submission failed or returned no prompt_id. ComfyUI Response: {result}")
             
     except json.JSONDecodeError:
         print("Failed to parse the Spark AI response as valid JSON.")

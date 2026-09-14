@@ -18,6 +18,14 @@ class ComfyUIClient:
         try:
             with urllib.request.urlopen(req) as response:
                 return json.loads(response.read())
+        except urllib.error.HTTPError as e:
+            try:
+                error_body = e.read().decode("utf-8")
+                print(f"Failed to queue prompt: HTTP Error {e.code}: {e.reason}")
+                print(f"ComfyUI Error Details:\n{error_body}")
+            except Exception:
+                print(f"Failed to queue prompt: {e}")
+            return {}
         except Exception as e:
             print(f"Failed to queue prompt: {e}")
             return {}
